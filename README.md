@@ -13,14 +13,17 @@ IntelliJ: `src` 폴더를 Sources Root로 지정 → `Application.java` 실행
 javac -encoding UTF-8 -d out $(find src -name "*.java")
 java -Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 -cp out randomlife.Application
 ```
-
 ## 담당
 
 | 담당 | 파일 |
 | --- | --- |
-| A | `Application`, `core/` 전체, `temperament/` 전체, `util/InputUtil`, `util/GameConfig` |
-| B | `event/` 전체 |
-| C | `job/` 전체, `util/StoryText` |
+| A | `Application`, `core/Person`, `core/LifeSimulator`, `util/GameConfig` |
+| B | `event/` 전체, `temperament/` 전체 |
+| C (대체: A) | `job/` 전체, `util/StoryText`, `util/InputUtil`, `core/Country`, `core/CountryData`, `core/FamilyType`, `core/LifeRecord`, `core/Ending` |
+
+> C가 기한까지 못 하면 A가 이어받음
+> - **1일차 점심까지**: `Country`, `FamilyType`, `LifeRecord`, `InputUtil` (A·B가 기다리는 파일)
+> - **2일차 끝까지**: `Ending`
 
 ## 이미 채워져 있는 것 / 우리가 채울 것
 
@@ -58,15 +61,15 @@ java -Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 -cp out randomlife.Applicatio
 | `docs:` | 문서·주석 | `docs: README 실행 방법 추가` |
 | `refactor:` | 동작은 그대로, 코드만 정리 | `refactor: 중복 출력 메서드로 분리` |
 
-> 자세한 Git 사용법과 주의사항은 `CONTRIBUTING.md` 참고
+> 자세한 Git 사용법과 주의사항은 [CONTRIBUTING.md](CONTRIBUTING.md) 참고
 
 ## 추천 구현 순서 (서로 기다리지 않게)
 
 | 순서 | A | B | C |
 | --- | --- | --- | --- |
-| 1일차 | `GameConfig`, `InputUtil`, `LifeRecord`, `Country`, `FamilyType`, `Person` | `LifeEvent`, `Choice` 빌더·조건 검사 | `Job`, `JobEvent` |
-| 2일차 | `temperament/` 4개, `LifeSimulator` 기본 흐름 | `Choice.apply`, `ChoiceEvent`, `TemperamentEvent`, `AutoEvent` | `StoryText` 문구 다듬기, A·B 도와주기 |
-| 3일차 | `LifeSimulator` 멈춤·노년·반려동물, `Ending` | 연결 테스트, 버그 수정 | 연결 테스트, 버그 수정 |
+| 1일차 | `GameConfig`, `Person` | `LifeEvent`, `Choice` 빌더·조건 검사, `temperament/` 5개 | **점심까지** `Country`, `FamilyType`, `LifeRecord`, `InputUtil` → 오후 `Job` |
+| 2일차 | `LifeSimulator` 기본 흐름 (출생 → 이벤트 → 사망) | `Choice.apply`, `ChoiceEvent`, `TemperamentEvent`, `AutoEvent` | `JobEvent`, `StoryText` 문구 다듬기 |
+| 3일차 | `LifeSimulator` 멈춤·노년·반려동물 | 연결 테스트, 버그 수정 | `Ending` (결산 화면) |
 | 4일차 | 전체 플레이 테스트 · 발표 준비 | ← | ← |
 
 ## 데이터 추가하는 법
