@@ -23,6 +23,7 @@ public class AutoEvent extends LifeEvent {
     /** 결말 추가 (빌더). 부르는 곳: EventData */
     public AutoEvent add(Choice outcome) {
         // TODO outcomes에 추가 후 return this
+        outcomes.add(outcome);
         return this;
     }
 
@@ -30,7 +31,15 @@ public class AutoEvent extends LifeEvent {
     @Override
     public void run(Person p) {
         // TODO 1. printHeader(p)
+        printHeader(p);
         // TODO 2. outcomes를 순서대로 돌면서 c.isAvailable(p)가 true인 첫 번째 것만 c.apply(p) 후 break
+        for(Choice c : outcomes){
+            if(c.isAvailable(p)){
+                c.apply(p);
+                break;
+            }
+        }
         // TODO 3. InputUtil.waitEnter()
+        InputUtil.waitEnter();
     }
 }

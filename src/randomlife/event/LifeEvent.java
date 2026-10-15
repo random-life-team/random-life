@@ -31,7 +31,10 @@ public abstract class LifeEvent {
 
     /** 부르는 곳: 자식 클래스 생성자의 super(...) */
     public LifeEvent(int age, String title, String description, String statKey) {
-        // TODO 필드 4개 저장
+        this.age = age;
+        this.title = title;
+        this.description = description;
+        this.statKey = statKey;
     }
 
     /**
@@ -55,13 +58,21 @@ public abstract class LifeEvent {
      * 부르는 곳: 자식 클래스의 run()
      */
     protected void printHeader(Person p) {
-        // TODO 1. 빈 줄, GameConfig.LINE
-        // TODO 2. String.format(TITLE_FORMAT, age, title)
-        // TODO 3. GameConfig.LINE
-        // TODO 4. String.format(MAP_FORMAT, LifeSimulator.lifeMap(age), age)
-        // TODO 5. 빈 줄
-        // TODO 6. statKey가 null이 아니면 printStatLine(p) 후 빈 줄
-        // TODO 7. description, 빈 줄
+        System.out.println();
+        System.out.println(GameConfig.LINE);
+        System.out.println(String.format(TITLE_FORMAT, age, title));
+        System.out.println(GameConfig.LINE);
+        System.out.println(String.format(MAP_FORMAT, LifeSimulator.lifeMap(age), age));
+        System.out.println();
+
+        // 국가 통계 줄은 statKey가 있는 이벤트에서만
+        if (statKey != null) {
+            printStatLine(p);
+            System.out.println();
+        }
+
+        System.out.println(description);
+        System.out.println();
     }
 
     /**
@@ -72,21 +83,25 @@ public abstract class LifeEvent {
      *   SMOKING → "> 한국 15세 이상 흡연율 19.0%"
      */
     private void printStatLine(Person p) {
-        // TODO 1. Country c = p.getCountry();
-        // TODO 2. statKey가 STAT_U5 이면
-        //         StoryText.STAT_U5 (국가 이름, c.getUnder5Text())
-        //         StoryText.STAT_U5_SURVIVE (StoryText.josa(이름, "은", "는"))  두 줄 출력
-        // TODO 3. STAT_COLLEGE 이면 StoryText.STAT_COLLEGE (국가 이름, c.getCollegeRate())
-        // TODO 4. STAT_SMOKING 이면 StoryText.STAT_SMOKING (국가 이름, String.format("%.1f", c.getSmokingRate()))
+        Country c = p.getCountry();
+
+        if (STAT_U5.equals(statKey)) {
+            System.out.println(String.format(StoryText.STAT_U5, c.getName(), c.getUnder5Text()));
+            System.out.println(String.format(StoryText.STAT_U5_SURVIVE,
+                    StoryText.josa(p.getName(), "은", "는")));
+        } else if (STAT_COLLEGE.equals(statKey)) {
+            System.out.println(String.format(StoryText.STAT_COLLEGE, c.getName(), c.getCollegeRate()));
+        } else if (STAT_SMOKING.equals(statKey)) {
+            System.out.println(String.format(StoryText.STAT_SMOKING, c.getName(),
+                    String.format("%.1f", c.getSmokingRate())));
+        }
     }
 
     public int getAge() {
-        // TODO age 반환
-        return 0;
+        return age;
     }
 
     public String getTitle() {
-        // TODO title 반환
-        return null;
+        return title;
     }
 }

@@ -63,58 +63,63 @@ public class Choice {
 
     /** 부르는 곳: EventData, JobData */
     public Choice(String text, String resultText) {
-        // TODO text, resultText 저장
+        this.text = text;
+        this.resultText = resultText;
     }
 
     // =====================================================
     // 빌더 메서드 — 값 저장 후 return this; (그래야 점으로 계속 이어 붙일 수 있음)
     // =====================================================
     public Choice record(String record) {
-        // TODO record 저장 후 return this
+        this.record = record;
         return this;
     }
 
     public Choice needMoney(int money) {
-        // TODO needMoney 저장 후 return this
+        this.needMoney = money;
         return this;
     }
 
     public Choice needFlag(String flag) {
-        // TODO needFlag 저장 후 return this
+        this.needFlag = flag;
         return this;
     }
 
     public Choice needStat(String stat, int min) {
-        // TODO needStat, needStatMin 저장 후 return this
+        this.needStat = stat;
+        this.needStatMin = min;
         return this;
     }
 
     public Choice addFlag(String flag) {
-        // TODO addFlag 저장 후 return this
+        this.addFlag = flag;
         return this;
     }
 
     /** 능력치 변화 추가 (min ~ max 사이 랜덤). 예) effect(GameConfig.KNOW, 10, 15) */
     public Choice effect(String stat, int min, int max) {
-        // TODO effects에 new String[]{stat, "" + min, "" + max} 추가 후 return this
+        effects.add(new String[]{stat, "" + min, "" + max});
         return this;
     }
 
     /** 성공 확률 + 실패 시 문장 + 실패 시 연표. 예) success(50, "자리는 다른 사람에게...", "승진에서 떨어졌다") */
     public Choice success(int rate, String failText, String failRecord) {
-        // TODO successRate, failText, failRecord 저장 후 return this
+        this.successRate = rate;
+        this.failText = failText;
+        this.failRecord = failRecord;
         return this;
     }
 
     /** 실패 시 능력치 변화 추가 */
     public Choice failEffect(String stat, int min, int max) {
-        // TODO failEffects에 추가 후 return this (effect와 같은 방식)
+        failEffects.add(new String[]{stat, "" + min, "" + max});
         return this;
     }
 
     /** 반려동물 선택지로 만들기. 예) pet("강아지", "보리") */
     public Choice pet(String type, String defaultName) {
-        // TODO petType, petDefaultName 저장 후 return this
+        this.petType = type;
+        this.petDefaultName = defaultName;
         return this;
     }
 
@@ -124,8 +129,7 @@ public class Choice {
 
     /** 고를 수 있는지. 부르는 곳: ChoiceEvent, AutoEvent, JobEvent */
     public boolean isAvailable(Person p) {
-        // TODO getLockReason(p)가 null이면 true
-        return true;
+        return getLockReason(p) == null;
     }
 
     /**
@@ -134,11 +138,19 @@ public class Choice {
      * 부르는 곳: ChoiceEvent.askChoice() (🔒 옆에 출력)
      */
     public String getLockReason(Person p) {
-        // TODO 1. needFlag가 있는데 p.hasFlag(needFlag)가 false면 flagReason(needFlag) return
-        // TODO 2. needStat이 있는데 p.getStat(needStat) < needStatMin 이면
-        //         String.format(LOCK_STAT, statName(needStat)) return
-        // TODO 3. p.getStat(GameConfig.MONEY) < needMoney 면 LOCK_MONEY return
-        // TODO 4. 다 통과하면 null return
+        // 1. 플래그 조건
+        if (needFlag != null && !p.hasFlag(needFlag)) {
+            return flagReason(needFlag);
+        }
+        // 2. 능력치 조건
+        if (needStat != null && p.getStat(needStat) < needStatMin) {
+            return String.format(LOCK_STAT, statName(needStat));
+        }
+        // 3. 자산 조건 (기본값 Integer.MIN_VALUE라 조건 없으면 항상 통과)
+        if (p.getStat(GameConfig.MONEY) < needMoney) {
+            return LOCK_MONEY;
+        }
+        // 4. 전부 통과
         return null;
     }
 
@@ -151,49 +163,105 @@ public class Choice {
      * 부르는 곳: ChoiceEvent, AutoEvent, Job(오버라이드 후 super.apply)
      */
     public void apply(Person p) {
-        // TODO 1. String shownResult = resultText;  String shownRecord = record;
-        // TODO 2. 반려동물 선택지면(petType != null)
-        //         - InputUtil.readLine(String.format(StoryText.PET_NAME_ASK, petDefaultName), true)로 이름 입력
-        //         - 비어 있으면 petDefaultName 사용
-        //         - p.adoptPet(petType, 이름)
-        //         - shownResult = String.format(StoryText.PET_WELCOME, StoryText.josa(이름, "이", "가"))
-        //         - shownRecord = String.format(StoryText.PET_RECORD, petType, StoryText.josa(이름, "을", "를"))
-        // TODO 3. boolean success = GameConfig.chance(successRate);
-        // TODO 4. 빈 줄 → 성공이면 shownResult, 실패면 failText 출력
-        // TODO 5. 성공이면 effects, 실패면 failEffects 를 돌면서
-        //         - 최소/최대는 Integer.parseInt(e[1]), Integer.parseInt(e[2])
-        //         - amount = GameConfig.randomInt(최소, 최대)
-        //         - 기질이 있으면 amount = p.getTemperament().applyBonus(e[0], amount)
-        //         - amount가 0이면 건너뜀
-        //         - p.changeStat(e[0], amount)
-        //         - formatChange(e[0], amount)를 리스트에 모음
-        // TODO 6. 빈 줄 → 리스트가 비었으면 NO_CHANGE, 아니면 String.join(CHANGE_JOIN, 리스트) 출력
-        // TODO 7. 성공이면 addFlag가 있으면 p.addFlag(), shownRecord가 있으면 p.addRecord()
-        //         실패면 failRecord가 있으면 p.addRecord(failRecord)
+        String shownResult = resultText;
+        String shownRecord = record;
+
+        // 반려동물 선택지면 이름을 받고 입양
+        if (petType != null) {
+            String name = InputUtil.readLine(String.format(StoryText.PET_NAME_ASK, petDefaultName), true);
+            if (name.isEmpty()) {
+                name = petDefaultName;
+            }
+            p.adoptPet(petType, name);
+            shownResult = String.format(StoryText.PET_WELCOME, StoryText.josa(name, "이", "가"));
+            shownRecord = String.format(StoryText.PET_RECORD, petType, StoryText.josa(name, "을", "를"));
+        }
+
+        // 성공 여부 (successRate 기본값 100 → 무조건 성공)
+        boolean success = GameConfig.chance(successRate);
+
+        System.out.println();
+        System.out.println(success ? shownResult : failText);
+
+        // 성공/실패에 맞는 능력치 변화 적용
+        List<String[]> targetEffects = success ? effects : failEffects;
+        List<String> changes = new ArrayList<>();
+
+        for (String[] e : targetEffects) {
+            String stat = e[0];
+            int min = Integer.parseInt(e[1]);
+            int max = Integer.parseInt(e[2]);
+            int amount = GameConfig.randomInt(min, max);
+
+            // 기질 보너스 (5세 이전엔 기질이 없음 → null 체크)
+            if (p.getTemperament() != null) {
+                amount = p.getTemperament().applyBonus(stat, amount);
+            }
+            if (amount == 0) {
+                continue;
+            }
+
+            p.changeStat(stat, amount);
+            changes.add(formatChange(stat, amount));
+        }
+
+        System.out.println();
+        if (changes.isEmpty()) {
+            System.out.println(NO_CHANGE);
+        } else {
+            System.out.println(String.join(CHANGE_JOIN, changes));
+        }
+
+        // 플래그 · 연표
+        if (success) {
+            if (addFlag != null) {
+                p.addFlag(addFlag);
+            }
+            if (shownRecord != null) {
+                p.addRecord(shownRecord);
+            }
+        } else {
+            if (failRecord != null) {
+                p.addRecord(failRecord);
+            }
+        }
     }
 
     /** 변화 한 개를 글자로. 예) ("KNOW", 12) → "지식 +12", ("MONEY", -200) → "자산 -200만원" */
     private String formatChange(String stat, int amount) {
-        // TODO 1. 부호 = amount > 0 이면 "+", 아니면 "" (음수는 숫자에 - 가 이미 붙어 있음)
-        // TODO 2. MONEY면 String.format(CHANGE_MONEY, 부호, amount)
-        // TODO 3. 아니면 String.format(CHANGE_STAT, statName(stat), 부호, amount)
-        return "";
+        String sign = amount > 0 ? "+" : "";   // 음수는 숫자에 - 가 이미 붙어 있음
+
+        if (GameConfig.MONEY.equals(stat)) {
+            return String.format(CHANGE_MONEY, sign, amount);
+        }
+        return String.format(CHANGE_STAT, statName(stat), sign, amount);
     }
 
     /** 능력치 영어 이름 → 한글. 예) "KNOW" → "지식" */
     private String statName(String stat) {
-        // TODO HEALTH→"건강", HAPPY→"행복", KNOW→"지식", RELATION→"관계", 나머지→"자산"
-        return "";
+        if (GameConfig.HEALTH.equals(stat)) {
+            return "건강";
+        } else if (GameConfig.HAPPY.equals(stat)) {
+            return "행복";
+        } else if (GameConfig.KNOW.equals(stat)) {
+            return "지식";
+        } else if (GameConfig.RELATION.equals(stat)) {
+            return "관계";
+        }
+        return "자산";
     }
 
     /** 플래그 → 잠금 이유. 예) "COLLEGE" → "대학 졸업 필요" */
     private String flagReason(String flag) {
-        // TODO FLAG_COLLEGE→LOCK_COLLEGE, FLAG_MARRIED→LOCK_MARRIED, 나머지→LOCK_ETC
-        return "";
+        if (GameConfig.FLAG_COLLEGE.equals(flag)) {
+            return LOCK_COLLEGE;
+        } else if (GameConfig.FLAG_MARRIED.equals(flag)) {
+            return LOCK_MARRIED;
+        }
+        return LOCK_ETC;
     }
 
     public String getText() {
-        // TODO text 반환
-        return null;
+        return text;
     }
 }
