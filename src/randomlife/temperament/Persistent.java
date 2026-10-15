@@ -19,6 +19,9 @@ public class Persistent extends Temperament {
     public int applyBonus(String stat, int amount) {
         // TODO 1. stat이 GameConfig.MONEY 가 아니고, amount가 0보다 작으면 amount / 2 를 return
         //         예) -10 → -5
+        if(!GameConfig.MONEY.equals(stat)&&amount < 0){
+            return amount/ 2;
+        }
         // TODO 2. 아니면 amount 그대로 return
         return amount;
     }
