@@ -32,7 +32,26 @@ public class InputUtil {
         //         → 실패하면(NumberFormatException) NOT_NUMBER 출력 후 continue
         // TODO 5. min ~ max 범위 밖이면 System.out.printf(OUT_OF_RANGE + "%n", min, max); 후 continue
         // TODO 6. 정상이면 return
-        return min;
+
+        while (true) {
+            System.out.println(PROMPT);
+            String input = sc.nextLine().trim();
+
+            int number;
+
+            try {
+                number = Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println(NOT_NUMBER);
+                continue;
+            }
+            if (number < min || number > max) {
+                System.out.printf(OUT_OF_RANGE + "%n", min, max);
+                continue;
+            }
+            return number;
+        }
+
     }
 
     /**
@@ -46,7 +65,18 @@ public class InputUtil {
         // TODO 2. readInt(1, locked.length)로 번호 입력
         // TODO 3. locked[번호 - 1]이 true면 LOCKED_CHOICE 출력 후 다시 입력
         // TODO 4. 잠기지 않은 번호면 return
-        return 1;
+
+
+        while (true) {
+            int choice = readInt(1, locked.length);
+
+            if (locked[choice - 1]) {
+                System.out.println(LOCKED_CHOICE);
+                continue;
+            }
+
+            return choice;
+        }
     }
 
     /**
@@ -61,7 +91,21 @@ public class InputUtil {
         // TODO 3. System.out.print(PROMPT); → sc.nextLine().trim()
         // TODO 4. allowEmpty가 false인데 비어 있으면(isEmpty) EMPTY_INPUT 출력 후 다시 반복
         // TODO 5. return 입력값
-        return "";
+        if (question != null) {
+            System.out.println(PROMPT);
+        }
+
+        while (true) {
+            System.out.println(PROMPT);
+            String input = sc.nextLine().trim();
+
+            if (!allowEmpty && input.isEmpty()) {
+                System.out.println(EMPTY_INPUT);
+                continue;
+            }
+
+            return input;
+        }
     }
 
     /**
@@ -72,5 +116,9 @@ public class InputUtil {
         // TODO 1. 빈 줄 하나 출력
         // TODO 2. ENTER_MSG 출력
         // TODO 3. sc.nextLine(); (입력값은 버림)
+
+        System.out.println();
+        System.out.println(ENTER_MSG);
+        sc.nextInt();
     }
 }
