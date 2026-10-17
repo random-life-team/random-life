@@ -67,7 +67,7 @@ public class Person {
         //         (인덱스는 GameConfig.RANDOM.nextInt(리스트.size()))
 
         List<Country> countries = CountryData.getAll();
-        this.country = countries.get(GameConfig.RANDOM.nextInt(countries.size();
+        this.country = countries.get(GameConfig.RANDOM.nextInt(countries.size()));
         // TODO 3. FamilyType.values()에서 랜덤 1개 → familyType
         FamilyType[] types = FamilyType.values();
         this.familyType = types[GameConfig.RANDOM.nextInt(types.length)];
