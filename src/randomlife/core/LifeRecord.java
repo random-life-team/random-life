@@ -20,6 +20,8 @@ public class LifeRecord implements Comparable<LifeRecord> {
     /** 부르는 곳: Person.addRecord(), Person.addThought() */
     public LifeRecord(int age, String text) {
         // TODO 필드 2개(age, text)에 매개변수 값 저장
+        this.age = age;
+        this.text = text;
     }
 
     /**
@@ -31,7 +33,7 @@ public class LifeRecord implements Comparable<LifeRecord> {
     public int compareTo(LifeRecord other) {
         // TODO Integer.compare(this.age, other.age) 를 return
         //      (this.age - other.age 도 되지만 Integer.compare가 더 안전함)
-        return 0;
+        return Integer.compare(this.age, other.age);
     }
 
     /**
@@ -41,16 +43,16 @@ public class LifeRecord implements Comparable<LifeRecord> {
     @Override
     public String toString() {
         // TODO String.format(FORMAT, age, text) 를 return
-        return "";
+        return String.format(FORMAT, age, text);
     }
 
     public int getAge() {
         // TODO age 반환
-        return 0;
+        return age;
     }
 
     public String getText() {
         // TODO text 반환
-        return null;
+        return text;
     }
 }
