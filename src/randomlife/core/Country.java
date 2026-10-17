@@ -21,6 +21,15 @@ public class Country {
     public Country(String name, String flag, double lifeExpectancy, int minLifespan, int maxLifespan,
                    double under5Death, String collegeRate, double smokingRate, int internetRate) {
         // TODO 매개변수 9개를 같은 이름의 필드에 전부 저장 (this.name = name; ...)
+        this.name = name;
+        this.flag = flag;
+        this.lifeExpectancy = lifeExpectancy;
+        this.minLifespan = minLifespan;
+        this.maxLifespan = maxLifespan;
+        this.under5Death = under5Death;
+        this.collegeRate = collegeRate;
+        this.smokingRate = smokingRate;
+        this.internetRate = internetRate;
     }
 
     /**
@@ -30,7 +39,7 @@ public class Country {
      */
     public String getDisplayName() {
         // TODO flag + " " + name 을 return
-        return "";
+        return flag + " " + name;
     }
 
     /**
@@ -40,51 +49,51 @@ public class Country {
      */
     public String getUnder5Text() {
         // TODO String.format("%.1f", under5Death) 를 return
-        return "";
+        return String.format("%.1f", under5Death);
     }
 
     public String getName() {
         // TODO name 반환
-        return null;
+        return name;
     }
 
     public String getFlag() {
         // TODO flag 반환
-        return null;
+        return flag;
     }
 
     public double getLifeExpectancy() {
         // TODO lifeExpectancy 반환
-        return 0;
+        return lifeExpectancy;
     }
 
     public int getMinLifespan() {
         // TODO minLifespan 반환
-        return 0;
+        return minLifespan;
     }
 
     public int getMaxLifespan() {
         // TODO maxLifespan 반환
-        return 0;
+        return maxLifespan;
     }
 
     public double getUnder5Death() {
         // TODO under5Death 반환
-        return 0;
+        return under5Death;
     }
 
     public String getCollegeRate() {
         // TODO collegeRate 반환
-        return null;
+        return collegeRate;
     }
 
     public double getSmokingRate() {
         // TODO smokingRate 반환
-        return 0;
+        return smokingRate;
     }
 
     public int getInternetRate() {
         // TODO internetRate 반환
-        return 0;
+        return internetRate;
     }
 }
