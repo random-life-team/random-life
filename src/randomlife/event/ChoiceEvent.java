@@ -25,7 +25,7 @@ public class ChoiceEvent extends LifeEvent {
 
     /** 선택지 추가 (빌더). 부르는 곳: EventData */
     public ChoiceEvent add(Choice c) {
-        // TODO choices에 추가 후 return this
+        choices.add(c);
         return this;
     }
 
@@ -35,10 +35,10 @@ public class ChoiceEvent extends LifeEvent {
      */
     @Override
     public void run(Person p) {
-        // TODO 1. printHeader(p)
-        // TODO 2. int index = askChoice(p, choices);
-        // TODO 3. afterChoose(p, index);
-        // TODO 4. choices.get(index).apply(p);
+        printHeader(p);
+        int index = askChoice(p, choices);
+        afterChoose(p, index);
+        choices.get(index).apply(p);
     }
 
     /**
@@ -50,14 +50,23 @@ public class ChoiceEvent extends LifeEvent {
      * List<? extends Choice> = Choice 또는 Choice의 자식(Job) 리스트 둘 다 받을 수 있다는 뜻
      */
     protected int askChoice(Person p, List<? extends Choice> list) {
-        // TODO 1. boolean[] locked = new boolean[list.size()];
-        // TODO 2. for문으로 각 선택지에 대해
-        //         - 잠긴 이유 = c.getLockReason(p)
-        //         - String.format(CHOICE_FORMAT, 번호(i+1), c.getText()) 출력
-        //           잠겼으면 뒤에 String.format(LOCK_FORMAT, GameConfig.LOCK_ICON, 이유)를 붙여서
-        //         - locked[i] = (이유 != null)
-        // TODO 3. InputUtil.readChoice(locked) - 1 을 return (번호 → 인덱스)
-        return 0;
+        boolean[] locked = new boolean[list.size()];
+
+        for (int i = 0; i < list.size(); i++) {
+            Choice c = list.get(i);
+            String reason = c.getLockReason(p);
+
+            String line = String.format(CHOICE_FORMAT, i + 1, c.getText());
+            if (reason != null) {
+                line += String.format(LOCK_FORMAT, GameConfig.LOCK_ICON, reason);
+            }
+            System.out.println(line);
+
+            locked[i] = (reason != null);
+        }
+
+        // InputUtil은 1부터 시작하는 번호를 주므로 -1 해서 인덱스로
+        return InputUtil.readChoice(locked) - 1;
     }
 
     /**

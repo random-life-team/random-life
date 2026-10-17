@@ -20,10 +20,19 @@ public class TemperamentEvent extends ChoiceEvent {
     /** 부르는 곳: ChoiceEvent.run() (오버라이드했으므로 이 메서드가 대신 실행됨) */
     @Override
     protected void afterChoose(Person p, int index) {
-        // TODO switch (index)로
-        //      0 → p.setTemperament(new Curious())
-        //      1 → new Active()
-        //      2 → new Empathic()
-        //      그 외 → new Persistent()
+        switch (index) {
+            case 0:
+                p.setTemperament(new Curious());
+                break;
+            case 1:
+                p.setTemperament(new Active());
+                break;
+            case 2:
+                p.setTemperament(new Empathic());
+                break;
+            default:
+                p.setTemperament(new Persistent());
+                break;
+        }
     }
 }
