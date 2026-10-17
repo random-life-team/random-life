@@ -18,15 +18,17 @@ public enum FamilyType {
     /** enum 생성자는 위의 RICH(...), NORMAL(...) 줄이 자동으로 부른다 */
     FamilyType(String label, int startMoney) {
         // TODO 필드 2개에 매개변수 값 저장
+        this.label = label;
+        this.startMoney = startMoney;
     }
 
     public String getLabel() {
         // TODO label 반환
-        return null;
+        return label;
     }
 
     public int getStartMoney() {
         // TODO startMoney 반환
-        return 0;
+        return startMoney;
     }
 }
