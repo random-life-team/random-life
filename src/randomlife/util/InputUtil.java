@@ -34,7 +34,7 @@ public class InputUtil {
         // TODO 6. 정상이면 return
 
         while (true) {
-            System.out.println(PROMPT);
+            System.out.print(PROMPT);
             String input = sc.nextLine().trim();
 
             int number;
