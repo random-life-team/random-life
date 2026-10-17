@@ -92,11 +92,11 @@ public class InputUtil {
         // TODO 4. allowEmpty가 false인데 비어 있으면(isEmpty) EMPTY_INPUT 출력 후 다시 반복
         // TODO 5. return 입력값
         if (question != null) {
-            System.out.println(PROMPT);
+            System.out.println(question);
         }
 
         while (true) {
-            System.out.println(PROMPT);
+            System.out.print(PROMPT);
             String input = sc.nextLine().trim();
 
             if (!allowEmpty && input.isEmpty()) {
@@ -119,6 +119,6 @@ public class InputUtil {
 
         System.out.println();
         System.out.println(ENTER_MSG);
-        sc.nextInt();
+        sc.nextLine();
     }
 }
