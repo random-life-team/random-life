@@ -19,6 +19,9 @@ public class Curious extends Temperament {
     public int applyBonus(String stat, int amount) {
         // TODO 1. stat이 GameConfig.KNOW 이고, amount가 0보다 크면 amount + 5 를 return
         //         (문자열 비교는 == 말고 .equals() 사용)
+        if(GameConfig.KNOW.equals(stat) && amount > 0){
+            return amount + 5;
+        }
         // TODO 2. 아니면 amount 그대로 return
         return amount;
     }

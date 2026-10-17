@@ -9,6 +9,6 @@ import randomlife.core.LifeSimulator;
 public class Application {
 
     public static void main(String[] args) {
-        // TODO new LifeSimulator().start();
+        new LifeSimulator().start();
     }
 }

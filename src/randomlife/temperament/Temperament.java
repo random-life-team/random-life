@@ -16,6 +16,7 @@ public abstract class Temperament {
     /** 부르는 곳: 자식 클래스 생성자의 super(이름) */
     public Temperament(String name) {
         // TODO name 필드에 저장
+        this.name = name;
     }
 
     /**
@@ -29,6 +30,6 @@ public abstract class Temperament {
 
     public String getName() {
         // TODO name 반환
-        return null;
+        return name;
     }
 }

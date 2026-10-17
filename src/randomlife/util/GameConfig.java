@@ -85,8 +85,9 @@ public class GameConfig {
      */
     public static int randomInt(int min, int max) {
         // TODO RANDOM.nextInt(개수)는 0 ~ 개수-1 을 준다.
+        return RANDOM.nextInt(max - min + 1) + min;
         //      개수 = max - min + 1 → 거기에 min을 더해서 return
-        return min;
+
     }
 
     /**
@@ -96,7 +97,7 @@ public class GameConfig {
      */
     public static boolean chance(int percent) {
         // TODO randomInt(1, 100)이 percent 이하이면 true
-        return false;
+        return randomInt(1,100) <=percent;
     }
 
     /**
@@ -105,8 +106,12 @@ public class GameConfig {
      */
     public static void delay(int ms) {
         // TODO 1. ms가 0 이하면 바로 return
+        if (ms <=0) { return;}
         // TODO 2. Thread.sleep(ms) 호출
         //         → InterruptedException을 던지므로 try-catch로 감싸야 컴파일됨 (catch 안은 비워도 OK)
-            // 무시
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException e){
+        }
     }
 }

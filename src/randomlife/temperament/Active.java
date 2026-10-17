@@ -18,6 +18,9 @@ public class Active extends Temperament {
     @Override
     public int applyBonus(String stat, int amount) {
         // TODO 1. stat이 GameConfig.HEALTH 이고, amount가 0보다 크면 amount + 5 를 return
+        if(GameConfig.HEALTH.equals(stat)&&amount>0){
+            return amount +5;
+        }
         // TODO 2. 아니면 amount 그대로 return
         return amount;
     }
