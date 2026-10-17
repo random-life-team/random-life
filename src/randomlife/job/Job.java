@@ -20,5 +20,8 @@ public class Job extends Choice {
     public void apply(Person p) {
         // TODO 1. p.setJob(text)   (text = 직업 이름, 부모 Choice의 protected 필드라 바로 쓸 수 있음)
         // TODO 2. super.apply(p)   (나머지 결과 처리는 부모 것을 그대로 사용)
+        p.setJob(text);
+        super.apply(p);
+
     }
 }
