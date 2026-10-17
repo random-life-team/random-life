@@ -62,6 +62,8 @@ public class GameConfig {
     public static final int ILLNESS_CHANCE     = 10;           // 구간마다 % 확률
     public static final int ILLNESS_DAMAGE_MIN = 10;
     public static final int ILLNESS_DAMAGE_MAX = 20;
+    // 40세 "낯선 메시지" 이벤트 확률 (결혼한 사람 중) — 시연 때 100, 평소 30
+    public static final int AFFAIR_CHANCE = 100;
 
     // ===== 직업 =====
     public static final int JOB_SHOW_COUNT = 3;   // 30개 중 3개만 보여줌

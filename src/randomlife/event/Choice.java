@@ -50,6 +50,7 @@ public class Choice {
     // effects 한 칸 = {능력치 이름, 최소, 최대}  예) {"KNOW", "10", "15"}
     protected List<String[]> effects = new ArrayList<>();
     protected String addFlag;
+    protected String removeFlag;   // 성공 시 지울 플래그 (예: 이혼 → MARRIED 제거)
 
     // ===== 성공/실패 (기본값 = 무조건 성공) =====
     protected int successRate = 100;
@@ -93,6 +94,11 @@ public class Choice {
 
     public Choice addFlag(String flag) {
         this.addFlag = flag;
+        return this;
+    }
+    /** 성공 시 플래그 지우기. 예) removeFlag(GameConfig.FLAG_MARRIED) */
+    public Choice removeFlag(String flag) {
+        this.removeFlag = flag;
         return this;
     }
 
@@ -216,6 +222,9 @@ public class Choice {
         if (success) {
             if (addFlag != null) {
                 p.addFlag(addFlag);
+            }
+            if (removeFlag != null) {
+                p.removeFlag(removeFlag);
             }
             if (shownRecord != null) {
                 p.addRecord(shownRecord);

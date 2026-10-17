@@ -226,6 +226,26 @@ public class EventData {
                     .record("올해도 건강검진을 미뤘다")
                     .success(50, "어느 날 아침, 가슴이 답답해 병원에 실려 갔습니다.", "가슴이 답답해 병원에 실려 갔다")
                     .failEffect(HEALTH, -25, -15)));
+        // 결혼한 사람한테만, AFFAIR_CHANCE% 확률로 나오는 40세 이벤트
+        list.add(new ChoiceEvent(40, "낯선 메시지",
+                "배우자의 휴대폰에 낯선 이름이 떴습니다.\n늦은 밤, 같은 이름이 몇 번이고 반복되고 있었습니다.",
+                null)
+                .add(new Choice("한 번만 용서한다", "다시는 그러지 않겠다는 말을, 믿어 보기로 했습니다.")
+                        .effect(RELATION, -5, 0).effect(HAPPY, -10, -5)
+                        .record("배우자의 외도를 알았지만, 한 번만 용서하기로 했다")
+                        .success(50, "같은 이름이 다시 떴습니다. 이번엔 아무 말도 하지 않았습니다.",
+                                "한 번 용서했지만, 같은 일이 다시 일어났다")
+                        .failEffect(HAPPY, -15, -10).failEffect(HEALTH, -5, -3))
+                .add(new Choice("부부 상담을 받아 본다", "낯선 상담실에서, 처음으로 서로의 속마음을 들었습니다.")
+                        .needMoney(300)
+                        .effect(MONEY, -300, -300).effect(RELATION, 5, 10).effect(HAPPY, 0, 5)
+                        .record("외도 사실을 알고 함께 부부 상담을 받았다"))
+                .add(new Choice("각자의 길을 가기로 한다", "서류에 도장을 찍던 날, 끝내 사과는 듣지 못했습니다.")
+                        .effect(HAPPY, -15, -8).effect(MONEY, -1500, -500)
+                        .removeFlag(GameConfig.FLAG_MARRIED)
+                        .record("배우자의 외도로 이혼했다"))
+                .requireFlag(GameConfig.FLAG_MARRIED)
+                .appearChance(GameConfig.AFFAIR_CHANCE));
 
         // =====================================================
         // 60세 (자동 — 위에서부터 조건 맞는 첫 번째 결말 1개)

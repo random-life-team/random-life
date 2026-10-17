@@ -198,7 +198,7 @@ public class LifeSimulator {
 
                 // 3-4. 이 나이 이벤트 실행 (다형성: 종류 몰라도 run()만 부름)
                 for (LifeEvent e : events) {
-                    if (e.getAge() == age) {
+                    if (e.getAge() == age && e.isAvailable(p)) {
                         e.run(p);
                         if (p.isDead()) {
                             deathByHealth(p);
