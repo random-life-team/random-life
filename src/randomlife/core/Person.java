@@ -186,6 +186,10 @@ public class Person {
         // TODO flags에 추가
         flags.add(flag);
     }
+    /** 플래그 지우기 (이혼 등 과거 상태가 끝났을 때). 부르는 곳: Choice.apply() */
+    public void removeFlag(String flag) {
+        flags.remove(flag);
+    }
 
     /** 부르는 곳: Choice.getLockReason() */
     public boolean hasFlag(String flag) {

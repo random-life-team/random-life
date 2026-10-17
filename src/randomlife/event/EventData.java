@@ -226,6 +226,25 @@ public class EventData {
                     .record("올해도 건강검진을 미뤘다")
                     .success(50, "어느 날 아침, 가슴이 답답해 병원에 실려 갔습니다.", "가슴이 답답해 병원에 실려 갔다")
                     .failEffect(HEALTH, -25, -15)));
+        // 결혼한 사람한테만 나오는 40세 이벤트 (requireFlag)
+        list.add(new ChoiceEvent(40, "멀어진 사이",
+                "언젠가부터 식탁에서 대화가 줄었습니다.\n어느 밤, 배우자가 조용히 이혼 이야기를 꺼냈습니다.",
+                null)
+                .add(new Choice("다시 대화해 본다", "밤새 이야기를 나눴습니다. 오랜만에 서로를 다시 보았습니다.")
+                        .effect(RELATION, 5, 10).effect(HAPPY, 5, 8)
+                        .record("멀어졌던 배우자와 밤새 이야기를 나눴다")
+                        .success(60, "대화는 늘 같은 곳에서 끊겼습니다. 둘 사이에 긴 침묵이 남았습니다.",
+                                "배우자와 대화를 시도했지만, 사이는 쉽게 좁혀지지 않았다")
+                        .failEffect(HAPPY, -10, -5).failEffect(RELATION, -5, -3))
+                .add(new Choice("부부 상담을 받아 본다", "낯선 상담실에서, 처음으로 서로의 속마음을 들었습니다.")
+                        .needMoney(300)
+                        .effect(MONEY, -300, -300).effect(RELATION, 8, 12).effect(HAPPY, 3, 6)
+                        .record("부부 상담을 받았다. 처음으로 서로의 속마음을 들었다"))
+                .add(new Choice("각자의 길을 가기로 한다", "서류에 도장을 찍던 날, 서로의 앞날을 빌어 주었습니다.")
+                        .effect(HAPPY, -15, -8).effect(MONEY, -1500, -500)
+                        .removeFlag(GameConfig.FLAG_MARRIED)
+                        .record("이혼했다. 서로의 앞날을 빌어 주었다"))
+                .requireFlag(GameConfig.FLAG_MARRIED));
 
         // =====================================================
         // 60세 (자동 — 위에서부터 조건 맞는 첫 번째 결말 1개)

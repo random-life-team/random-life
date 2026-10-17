@@ -27,7 +27,10 @@ public abstract class LifeEvent {
     protected int age;              // 이 이벤트가 나오는 나이
     protected String title;         // "진로 선택"
     protected String description;   // 상황 설명
-    protected String statKey;       // 머리말에 보여줄 국가 통계 (없으면 null)
+    protected String statKey;
+    protected int appearChance = 100;   // 나올 확률 % (기본 100 = 항상)
+
+    protected String needFlag;      // 이 플래그가 있는 사람한테만 나오는 이벤트 (없으면 null = 모두)// 머리말에 보여줄 국가 통계 (없으면 null)
 
     /** 부르는 곳: 자식 클래스 생성자의 super(...) */
     public LifeEvent(int age, String title, String description, String statKey) {
@@ -95,6 +98,29 @@ public abstract class LifeEvent {
             System.out.println(String.format(StoryText.STAT_SMOKING, c.getName(),
                     String.format("%.1f", c.getSmokingRate())));
         }
+    }
+    /**
+     * 특정 플래그가 있는 사람한테만 나오게 하기 (빌더)
+     * 예) new ChoiceEvent(40, ...).add(...).requireFlag(GameConfig.FLAG_MARRIED)
+     * 부르는 곳: EventData
+     */
+    public LifeEvent requireFlag(String flag) {
+        this.needFlag = flag;
+        return this;
+    }
+    /** 나올 확률 정하기 (빌더). 예) .appearChance(30). 부르는 곳: EventData */
+    public LifeEvent appearChance(int percent) {
+        this.appearChance = percent;
+        return this;
+    }
+
+    /**
+     * 이 사람에게 이벤트가 나와야 하는지
+     * 부르는 곳: LifeSimulator.playLife()
+     */
+    public boolean isAvailable(Person p) {
+        if (needFlag != null && !p.hasFlag(needFlag)) return false;
+        return GameConfig.chance(appearChance);
     }
 
     public int getAge() {
