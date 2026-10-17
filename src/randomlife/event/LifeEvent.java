@@ -27,10 +27,9 @@ public abstract class LifeEvent {
     protected int age;              // 이 이벤트가 나오는 나이
     protected String title;         // "진로 선택"
     protected String description;   // 상황 설명
-    protected String statKey;
+    protected String statKey;           // 머리말에 보여줄 국가 통계 (없으면 null)
+    protected String needFlag;          // 이 플래그가 있는 사람한테만 나오는 이벤트 (없으면 null = 모두)
     protected int appearChance = 100;   // 나올 확률 % (기본 100 = 항상)
-
-    protected String needFlag;      // 이 플래그가 있는 사람한테만 나오는 이벤트 (없으면 null = 모두)// 머리말에 보여줄 국가 통계 (없으면 null)
 
     /** 부르는 곳: 자식 클래스 생성자의 super(...) */
     public LifeEvent(int age, String title, String description, String statKey) {

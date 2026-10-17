@@ -223,8 +223,8 @@ public class Choice {
             if (addFlag != null) {
                 p.addFlag(addFlag);
             }
-            if (removeFlag != null) {        // ← 추가
-                p.removeFlag(removeFlag);    // ← 추가
+            if (removeFlag != null) {
+                p.removeFlag(removeFlag);
             }
             if (shownRecord != null) {
                 p.addRecord(shownRecord);
