@@ -460,6 +460,7 @@ public class LifeSimulator {
     private void lastWords(Person p) {
         // TODO 1. 빈 줄 → InputUtil.readLine(StoryText.LAST_WORDS_ASK, true)
         // TODO 2. 비어 있지 않으면 p.setLastWords(입력)
+        InputUtil.stopAutoPlay();   // 빨리 감기 중이었어도 마지막 한마디는 직접 입력
         System.out.println();
         String words = InputUtil.readLine(StoryText.LAST_WORDS_ASK, true);
         if (!words.isEmpty()) p.setLastWords(words);
