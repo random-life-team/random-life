@@ -19,6 +19,18 @@ public class InputUtil {
     private static final String EMPTY_INPUT   = "한 글자 이상 입력해주세요.";
     private static final String LOCKED_CHOICE = "지금은 고를 수 없는 선택지입니다. 다른 번호를 골라주세요.";
 
+
+    // ===== 빨리 감기 (시연용) =====
+    // 엔터 대기 화면에서 s 를 입력하면, 죽을 때까지 선택지를 자동으로 골라 진행한다.
+    private static final String SKIP_KEY = "s";
+    private static final String SKIP_MSG = ">> 빨리 감기: 남은 인생을 자동으로 진행합니다...";
+    private static boolean autoPlay = false;
+
+    /** 빨리 감기 끄기 (부르는 곳: LifeSimulator.lastWords) */
+    public static void stopAutoPlay() {
+        autoPlay = false;
+    }
+
     /**
      * 숫자를 입력받는다. (min ~ max)
      * 예) readInt(1, 3) → 1, 2, 3 중 하나가 들어올 때까지 반복
@@ -61,6 +73,15 @@ public class InputUtil {
      * 부르는 곳: ChoiceEvent.askChoice()
      */
     public static int readChoice(boolean[] locked) {
+        // 빨리 감기 중이면 잠기지 않은 번호 중 하나를 랜덤으로 고른다
+        if (autoPlay) {
+            int pick;
+            do {
+                pick = GameConfig.randomInt(1, locked.length);
+            } while (locked[pick - 1]);
+            System.out.println(PROMPT + pick);
+            return pick;
+        }
         // TODO 1. while (true)로 무한 반복
         // TODO 2. readInt(1, locked.length)로 번호 입력
         // TODO 3. locked[번호 - 1]이 true면 LOCKED_CHOICE 출력 후 다시 입력
@@ -95,6 +116,12 @@ public class InputUtil {
             System.out.println(question);
         }
 
+
+        // 빨리 감기 중이면 입력 없이 빈 값 (반려동물 이름은 기본 이름, 생각은 건너뜀)
+        if (autoPlay) {
+            return "";
+        }
+
         while (true) {
             System.out.print(PROMPT);
             String input = sc.nextLine().trim();
@@ -117,8 +144,17 @@ public class InputUtil {
         // TODO 2. ENTER_MSG 출력
         // TODO 3. sc.nextLine(); (입력값은 버림)
 
+        if (autoPlay) {
+            return;
+        }
+
         System.out.println();
         System.out.println(ENTER_MSG);
-        sc.nextLine();
+        String input = sc.nextLine().trim();
+
+        if (input.equalsIgnoreCase(SKIP_KEY)) {
+            autoPlay = true;
+            System.out.println(SKIP_MSG);
+        }
     }
 }
